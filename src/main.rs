@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 fn main() {
     let instances = get_instances();
 
+
     for instance in instances.iter() {
         let msg = format!("Instace ID: {} || Instance Type: {} || Instance Public IP: {}", instance.InstanceId, instance.InstanceType, instance.PublicIpAddress);
         println!("{}", &msg); // Example of simplicity with structs
