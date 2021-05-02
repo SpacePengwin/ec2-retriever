@@ -6,11 +6,9 @@ fn main() {
     let instances = get_instances();
 
     for instance in instances.iter() {
-        let msg = format!("Instance ID: {} || Instance Public IP: {}", instance.InstanceId, instance.PublicIpAddress);
+        let msg = format!("Instace ID: {} || Instance Type: {} || Instance Public IP: {}", instance.InstanceId, instance.InstanceType, instance.PublicIpAddress);
         println!("{}", &msg); // Example of simplicity with structs
     }
-
-
 }
 
 fn get_instances() -> Vec<Instance> {
@@ -31,6 +29,21 @@ fn get_instances() -> Vec<Instance> {
         }
     }
     return instances;
+}
+
+fn get_instances_with_tag(key: &str, value: &str) -> Vec<Instance> {
+    let instances = get_instances();
+    let mut output: Vec<Instance> = Vec::new();
+    for instance in instances.iter() {
+        for tag in instance.Tags.iter(){
+            if tag.Key == key {
+                if tag.Value == value {
+                    output.push(instance.clone());
+                }
+            }
+        }
+    }
+    return output;
 }
 
 
@@ -57,7 +70,7 @@ struct Instance {
     LaunchTime: String,
     PublicDnsName: String,
     PublicIpAddress: String,
-    Tags: Vec<Tags>,
+    Tags: Vec<Tag>,
     Monitoring: Monitoring,
     Placement: Placement,
     PrivateDnsName: String,
@@ -169,7 +182,7 @@ struct State {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct Tags {
+struct Tag {
     Key: String,
     Value: String
 }
